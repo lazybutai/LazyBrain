@@ -1,0 +1,10 @@
+{
+	"id": "lazy-brain",
+	"name": "LazyBrain",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "LazyBrain: Your local AI-powered second brain for Obsidian. Chat with your notes using Ollama and local LLMs.",
+	"author": "lazybutai",
+	"authorUrl": "",
+	"isDesktopOnly": true
+}

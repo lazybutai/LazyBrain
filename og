@@ -1,0 +1,29 @@
+[33mcommit 17914fb3777e4f32f02090e4947b7a982df74fbb[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m
+Author: zaneti <zanetic.jerko@gmail.com>
+Date:   Sat Dec 13 17:34:25 2025 +0100
+
+    aded more api providers, tested and proofed open router and anthropic work the rest i havent tested
+
+[33mcommit 84e702b19f4c11a03d24836726213423f2bec796[m
+Author: zaneti <zanetic.jerko@gmail.com>
+Date:   Sat Dec 13 16:10:19 2025 +0100
+
+    adedd the @ function to chat to attach notes and click the link to open the note
+
+[33mcommit e2e52f15a1b16545a7f7f50efaf5255e483357ba[m
+Author: zaneti <zanetic.jerko@gmail.com>
+Date:   Sat Dec 13 11:01:32 2025 +0100
+
+    ui polished, getting ready to upload the plugin
+
+[33mcommit 478e2cdd7598b380d05d943f06823c9329ec0239[m
+Author: zaneti <zanetic.jerko@gmail.com>
+Date:   Sat Dec 13 01:01:20 2025 +0100
+
+    polished ui a bit, evrything seems to be working fine, created the feautres.md file
+
+[33mcommit dbd8e1d503e92fd1df0bd38e0ec8dce1e4fa8177[m
+Author: zaneti <zanetic.jerko@gmail.com>
+Date:   Fri Dec 12 22:53:40 2025 +0100
+
+    before UI changes, evrything is working
