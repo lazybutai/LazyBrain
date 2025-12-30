@@ -1,0 +1,896 @@
+/* Main Container */
+.local-llm-container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    user-select: text;
+    -webkit-user-select: text;
+    position: relative;
+    font-family: var(--font-interface);
+}
+
+/* Sidebar */
+.llm-sidebar {
+    width: 260px;
+    /* background-color: var(--background-secondary); Removed to blend with obsidian container */
+    background-color: transparent;
+    border-right: 1px solid var(--background-modifier-border);
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), padding 0.3s ease;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+}
+
+.llm-sidebar.collapsed {
+    width: 0;
+    border-right: none;
+    padding: 0;
+}
+
+/* Toggle Sidebar Button */
+/* Toggle Sidebar Button */
+.sidebar-toggle {
+    position: absolute;
+    left: 260px;
+    /* Aligned with open sidebar width */
+    z-index: 10;
+    background: transparent !important;
+    /* FORCE TRANSPARENT */
+    box-shadow: none !important;
+    border: none !important;
+    cursor: pointer;
+    opacity: 0.3;
+    /* Low opacity default */
+    transition: left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.2s, color 0.2s;
+    padding: 6px 8px;
+    /* Hit area */
+    color: var(--text-muted);
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Modifiers for Position */
+.sidebar-toggle-top {
+    top: 55px;
+    /* Moved down to clear header text */
+}
+
+.sidebar-toggle-bottom {
+    bottom: 90px;
+}
+
+/* Collapsed State */
+.local-llm-container.sidebar-closed .sidebar-toggle {
+    left: 4px;
+    /* Close to edge */
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+/* Hover Effects - Just Arrow Highlight */
+.sidebar-toggle:hover {
+    opacity: 1;
+    color: var(--text-normal);
+    /* Or accent if preferred */
+    background: transparent !important;
+}
+
+/* Sidebar Header */
+.sidebar-header {
+    padding: 15px;
+    border-bottom: none;
+    /* Removed border */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: transparent;
+    /* Removed background */
+}
+
+.new-chat-btn {
+    width: 100%;
+    background-color: var(--interactive-accent);
+    color: var(--text-on-accent);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.new-chat-btn:hover {
+    background-color: var(--interactive-accent-hover);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Chat List */
+.chat-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0;
+    /* Removed padding */
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    /* Tighter gap */
+}
+
+.chat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 16px;
+    /* Increased side padding */
+    border-radius: 0;
+    /* Square edges */
+    cursor: pointer;
+    font-size: 0.9em;
+    color: var(--text-muted);
+    transition: background-color 0.1s, color 0.1s;
+    margin: 0;
+    /* No margin */
+}
+
+.chat-item:hover {
+    background-color: var(--background-modifier-hover);
+    color: var(--text-normal);
+}
+
+.chat-item.active {
+    background-color: var(--background-modifier-active);
+    /* Standard active color */
+    color: var(--text-normal);
+    font-weight: 500;
+    box-shadow: none;
+    /* Flat look */
+    border-left: 2px solid var(--interactive-accent);
+    /* Optional: Accent strip */
+}
+
+.chat-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    margin-right: 8px;
+}
+
+/* Actions in Sidebar */
+.chat-actions {
+    display: flex;
+    gap: 0px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.chat-actions .icon-btn {
+    padding: 2px 3px;
+    margin: 0;
+}
+
+.chat-item:hover .chat-actions,
+.chat-item.active .chat-actions {
+    opacity: 1;
+}
+
+/* Main Area */
+.llm-main-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: var(--background-primary);
+    position: relative;
+}
+
+/* Messages Area */
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    scroll-behavior: smooth;
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.chat-message {
+    max-width: 80%;
+    padding: 12px 18px;
+    border-radius: 18px;
+    line-height: 1.6;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.95em;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    max-width: 85%;
+    position: relative;
+    padding: 0;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.chat-message.user {
+    align-self: flex-end;
+    align-items: flex-end;
+}
+
+.chat-message.assistant {
+    align-self: flex-start;
+    align-items: flex-start;
+}
+
+/* The Bubble itself */
+.message-bubble {
+    padding: 8px 14px;
+    border-radius: 18px;
+    font-size: 0.95em;
+    line-height: 1.5;
+    word-wrap: break-word;
+    /* Ensure wrapping */
+    width: fit-content;
+    /* Prevent bubble from stretching */
+    max-width: 100%;
+    /* Respect container max-width */
+}
+
+/* User Bubble Style - Purple Gradient (Robust) */
+.chat-message.user .message-bubble {
+    /* Fallback if variables missing */
+    background-color: #7b2cbf;
+    /* Modern Obsidian Standard - Opacity via color-mix */
+    background: color-mix(in srgb, var(--interactive-accent) 60%, transparent);
+    /* Attempt Gradient if RGB var exists */
+    background-image: linear-gradient(135deg, rgba(var(--interactive-accent-rgb), 0.6), rgba(var(--interactive-accent-rgb), 0.35));
+
+    color: var(--text-on-accent);
+    border-bottom-right-radius: 4px;
+    border: 1px solid color-mix(in srgb, var(--interactive-accent), transparent 50%);
+    text-align: left;
+}
+
+/* Meta Row (Icons & Branching) */
+.message-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 0 !important;
+    /* Force tight spacing */
+    padding-top: 2px;
+    padding-left: 4px;
+    padding-right: 4px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+/* ... existing hover rule ... */
+
+/* New Chat Button - Transparent Text Style */
+.new-chat-btn {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: var(--text-muted) !important;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: color 0.2s;
+    padding: 8px 0 !important;
+    width: 100%;
+}
+
+.new-chat-btn:hover {
+    color: var(--text-normal) !important;
+    background: transparent !important;
+    transform: none !important;
+}
+
+/* FORCE Transparent Icons Globally for Actions */
+.icon-btn,
+.msg-action-btn,
+.project-delete-btn,
+.delete-btn,
+.chat-actions .icon-btn,
+.chat-item .icon-btn {
+    background-color: transparent !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* Hover: Text Color Only */
+.icon-btn:hover,
+.msg-action-btn:hover,
+.project-delete-btn:hover,
+.delete-btn:hover,
+.chat-actions .icon-btn:hover,
+.chat-item .icon-btn:hover {
+    background-color: transparent !important;
+    background: transparent !important;
+    color: var(--text-normal) !important;
+    /* Or accent if preferred */
+    opacity: 1 !important;
+}
+
+/* Specific red hover for delete buttons if desired, or keep uniform */
+.project-delete-btn:hover,
+.delete-btn:hover {
+    color: var(--text-error) !important;
+}
+
+.chat-message.assistant .message-bubble {
+    background-color: var(--background-secondary);
+    border-bottom-left-radius: 44px;
+    border: 1px solid var(--background-modifier-border);
+    text-align: left;
+}
+
+/* Meta Row (Icons & Branching) */
+.message-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+    padding: 0 4px;
+    opacity: 0;
+    /* Hidden by default */
+    transition: opacity 0.2s ease;
+}
+
+.chat-message:hover .message-meta-row {
+    opacity: 1;
+}
+
+/* Branch Nav */
+.branch-nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75em;
+    color: var(--text-muted);
+}
+
+.branch-counter {
+    min-width: 30px;
+    text-align: center;
+}
+
+/* Action Buttons inside Meta Row */
+.message-actions-row {
+    display: flex;
+    gap: 4px;
+}
+
+.msg-action-btn {
+    padding: 4px;
+    color: var(--text-muted);
+    background: transparent;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.msg-action-btn:hover {
+    color: var(--interactive-accent);
+    /* Color only, no background */
+    background-color: transparent;
+    opacity: 1;
+}
+
+.msg-action-btn .svg-icon {
+    width: 16px;
+    height: 16px;
+    stroke-width: 2px;
+}
+
+/* Chat List Icons (Trash/Edit) - Remove background here too if user disliked it globally */
+.chat-item .icon-btn:hover,
+.chat-actions .icon-btn:hover {
+    background-color: transparent !important;
+    color: var(--text-error);
+    /* Make trash red or accent? Or just text normal. */
+    /* Actually user said "unified meaning the delete chat and delete project icons are different" 
+        and "make all the icons be without the background"
+     */
+}
+
+.project-delete-btn:hover,
+.delete-btn:hover {
+    color: var(--text-error) !important;
+}
+
+/* Markdown Content adjustments */
+.message-bubble p {
+    margin: 5px 0;
+}
+
+.message-bubble p:first-child {
+    margin-top: 0;
+}
+
+.message-bubble p:last-child {
+    margin-bottom: 0;
+}
+
+.message-bubble pre {
+    margin: 5px 0;
+}
+
+/* Markdown Content */
+.message-content {
+    white-space: pre-wrap;
+}
+
+.message-content.markdown-rendered p {
+    margin: 0.5em 0;
+}
+
+/* Actions Row (Copy/Edit) inside bubble */
+.message-actions-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 4px;
+    opacity: 0;
+    transition: opacity 0.2s;
+    justify-content: flex-end;
+}
+
+.chat-message:hover .message-actions-row {
+    opacity: 1;
+}
+
+.msg-action-btn {
+    background: rgba(255, 255, 255, 0.1);
+    /* Subtle on both backgrounds */
+    border: none;
+    cursor: pointer;
+    font-size: 0.75em;
+    padding: 3px 6px;
+    border-radius: 4px;
+    color: inherit;
+    opacity: 0.8;
+    transition: background 0.2s, opacity 0.2s;
+}
+
+.msg-action-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    opacity: 1;
+}
+
+/* Input Area - Floating sleek look */
+.chat-input-area {
+    padding: 0 20px 15px 20px;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+/* The Main "Bubble" Container */
+.chat-input-unified-container {
+    width: 100%;
+    max-width: 750px;
+    background-color: var(--background-secondary);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 20px;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.chat-input-unified-container:focus-within {
+    border-color: var(--interactive-accent);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.chat-input-editor-wrapper {
+    width: 100%;
+    position: relative;
+}
+
+.chat-input-editor {
+    font-family: inherit;
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    min-height: 24px;
+    max-height: 200px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: var(--text-normal);
+    line-height: 1.5;
+    padding: 0 4px;
+}
+
+.chat-input-editor[contenteditable]:empty::before {
+    content: attr(data-placeholder);
+    color: var(--text-muted);
+    opacity: 0.6;
+    pointer-events: none;
+    display: block;
+}
+
+.input-metrics {
+    font-size: 0.7em;
+    color: var(--text-muted);
+    padding: 4px 4px 0 4px;
+    display: flex;
+    gap: 10px;
+    opacity: 0.7;
+    justify-content: flex-end;
+}
+
+/* Footer Actions */
+.chat-input-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 4px;
+}
+
+.footer-left,
+.footer-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Buttons */
+.chat-input-unified-container .icon-btn {
+    color: var(--text-muted);
+    border-radius: 50%;
+    padding: 6px;
+    transition: all 0.2s ease;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-input-unified-container .icon-btn:hover {
+    background-color: var(--background-modifier-hover);
+    color: var(--interactive-accent);
+    /* User requested Accent colour on hover */
+    transform: scale(1.1);
+    /* Subtle animation */
+}
+
+/* FIX: Force accent color and glow when active */
+.chat-input-unified-container .icon-btn.is-active {
+    color: var(--text-on-accent) !important;
+    background-color: var(--interactive-accent) !important;
+    /* Stay in accent colour */
+    box-shadow: 0 0 12px rgba(var(--interactive-accent-rgb), 0.6) !important;
+    /* Stronger glow */
+    opacity: 1 !important;
+}
+
+.chat-input-unified-container .icon-btn.is-active:hover {
+    background-color: var(--interactive-accent) !important;
+    color: var(--text-on-accent) !important;
+    opacity: 1 !important;
+    transform: scale(1.1);
+}
+
+/* Model Selector Pill */
+.model-selector-container {
+    position: relative;
+}
+
+/* Model Selector Minimal Text */
+.model-selector-trigger-minimal {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 6px;
+    padding: 4px 6px;
+    font-size: 0.85em;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: 32px;
+}
+
+.model-selector-trigger-minimal:hover {
+    background-color: var(--background-modifier-hover) !important;
+    color: var(--text-normal);
+}
+
+.model-selector-trigger-minimal .model-icon {
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    color: var(--text-muted);
+}
+
+.model-selector-trigger-minimal .model-chevron {
+    opacity: 0.5;
+    display: flex;
+    align-items: center;
+    font-size: 0.8em;
+}
+
+/* Send Button Arrow */
+.send-btn-arrow {
+    background-color: var(--interactive-accent) !important;
+    /* User requested Highlight Color - forcing interactive-accent */
+    color: var(--text-on-accent) !important;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.1s, opacity 0.2s;
+    padding: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.send-btn-arrow:hover {
+    opacity: 0.9;
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.send-btn-arrow:active {
+    transform: scale(0.95);
+}
+
+.send-btn-arrow:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: var(--background-modifier-border);
+    color: var(--text-muted);
+    transform: none;
+    box-shadow: none;
+}
+
+/* Pending Files */
+.pending-files-bar {
+    display: flex;
+    gap: 8px;
+    padding-bottom: 8px;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--background-modifier-border);
+    margin-bottom: 8px;
+}
+
+.pending-file-chip {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--background-secondary-alt);
+    padding: 6px;
+    border-radius: 8px;
+    min-width: 64px;
+    border: 1px solid var(--background-modifier-border);
+}
+
+.pending-remove-btn {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: var(--text-error);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 1;
+}
+
+/* Loading */
+.loading-indicator {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85em;
+    padding-bottom: 5px;
+    opacity: 0.8;
+}
+
+/* Project Item Actions */
+.chat-item:hover .project-delete-btn {
+    opacity: 1 !important;
+}
+
+/* Loading Indicator Polish */
+.loading-indicator .stop-btn {
+    background: transparent !important;
+    border: none !important;
+    color: var(--text-muted);
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 0 4px;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+}
+
+.loading-indicator .stop-btn:hover {
+    color: var(--text-error);
+    background: transparent !important;
+}
+
+/* refined attachment styles */
+.attachment-chip {
+    display: none;
+    /* Hide old chips if we are moving to inline */
+}
+
+.attachment-link {
+    color: var(--interactive-accent);
+    text-decoration: none;
+    cursor: pointer;
+    background: rgba(var(--interactive-accent-rgb), 0.08);
+    /* Very subtle background */
+    padding: 0 4px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    vertical-align: baseline;
+}
+
+.attachment-link:hover {
+    background: rgba(var(--interactive-accent-rgb), 0.15);
+    text-decoration: none;
+    /* Chip style doesn't usually underline, but we can if requested */
+}
+
+/* The delete icon inside the link */
+.attachment-delete {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    margin-left: 2px;
+    opacity: 0;
+    transition: opacity 0.2s, background-color 0.2s;
+    color: var(--text-muted);
+}
+
+.attachment-link:hover .attachment-delete {
+    opacity: 1;
+}
+
+.attachment-delete:hover {
+    background-color: var(--background-modifier-error);
+    color: var(--text-on-accent);
+}
+
+/* Custom Model Selector - Vibecoded */
+.model-selector-container {
+    position: relative;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.model-selector-trigger {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.8em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 2px;
+    transition: color 0.2s;
+    height: 100%;
+}
+
+.model-selector-trigger:hover {
+    color: var(--text-normal);
+}
+
+.model-selector-trigger .model-name {
+    max-width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.model-selector-dropdown-menu {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    margin-bottom: 8px;
+    background-color: var(--background-secondary);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    min-width: 260px;
+    max-height: 320px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 4px;
+}
+
+.model-selector-header {
+    padding: 8px 12px;
+    font-size: 0.75em;
+    font-weight: 600;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--background-modifier-border);
+    margin-bottom: 4px;
+    /* rounded top is nice */
+    border-radius: 4px;
+}
+
+.model-list {
+    overflow-y: auto;
+    max-height: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.model-option {
+    padding: 8px 12px;
+    font-size: 0.9em;
+    cursor: pointer;
+    border-radius: 6px;
+    color: var(--text-normal);
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.model-option:hover {
+    background-color: var(--background-modifier-hover);
+}
+
+.model-option.selected {
+    background-color: var(--interactive-accent);
+    color: var(--text-on-accent);
+    font-weight: 500;
+}
